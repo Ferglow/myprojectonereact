@@ -1,26 +1,59 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
+import {
+    Typography,
+    List,
+    ListItem,
+    ListItemText,
+    IconButton,
+    Divider,
+    Box,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
+/* Componente para mostrar el carrito de compras */
 const Cart = () => {
     const { cartItems, removeFromCart } = useContext(CartContext);
 
+    /* Carga los productos del carrito al montar el componente */
+
+useEffect(() => {
+  console.log('Carrito actualizado:', cartItems);
+}, [cartItems]);
+
     return (
-        <section>
-            <h2>Carrito de compras</h2>
+        <Box sx={{ padding: 3 }}>
+            <Typography variant="h4" gutterBottom>Carrito de compras</Typography>
+            {/* Muestra los productos en el carrito */}
             {cartItems.length === 0 ? (
-                <p>No hay productos en el carrito.</p>
+                <Typography>No hay productos en el carrito.</Typography>
             ) : (
-                <ul>
+                <List>
                     {cartItems.map(item => (
-                        <li key={item.id}>
-                            {item.title} - ${item.price} x {item.quantity}
-                            <button onClick={() => removeFromCart(item.id)}>Eliminar</button>
-                        </li>
+                        <React.Fragment key={item.id}>
+                            <ListItem
+                                secondaryAction={
+                                    <IconButton edge="end" onClick={() => removeFromCart(item.id)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                }
+                            >
+                                <ListItemText
+                                    primary={`${item.title} x${item.quantity}`}
+                                    secondary={`$${item.price}`}
+                                />
+                            </ListItem>
+                            <Divider />
+                        </React.Fragment>
                     ))}
-                </ul>
+                </List>
             )}
-        </section>
+        </Box>
+        
     );
+    
 };
+
+
 
 export default Cart;

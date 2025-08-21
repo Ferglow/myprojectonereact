@@ -7,11 +7,11 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
 
-/* Función para agregar un producto al carrito */
-    const addToCart = (product) => {
+    /* Función para agregar un producto al carrito */
+    const addToCart = product => {
         // Verifica si el producto ya está en el carrito
-        setCartItems((prev) => {
-            const exists = prev.find(item => item.id === product.id);
+        setCartItems(prev => {
+            const exists = prev.find(item => item.id === product.id && item.variant === product.variant);
             // Si el producto ya existe, incrementa la cantidad en 1
             if (exists) {
                 return prev.map(item =>
@@ -21,13 +21,13 @@ export const CartProvider = ({ children }) => {
             return [...prev, { ...product, quantity: 1 }];
         });
     };
-/* Función para eliminar un producto del carrito */
+    /* Función para eliminar un producto del carrito */
     const removeFromCart = productId => {
         setCartItems(prev => prev.filter(item => item.id !== productId));
     };
-/* Proveedor del contexto que envuelve a los hijos */
+    /* Proveedor del contexto que envuelve a los hijos */
     return (
-        
+
         <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
             {children}
         </CartContext.Provider>
